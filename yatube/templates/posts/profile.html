@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    {% include 'includes/header.html' %}
+    <title>Профайл пользователя
+      {{ author.get_full_name }}</title>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-light" style="background-color: lightskyblue">
+        <div class="container"></div>
+      </nav>
+    </header>
+    <main>
+      <div class="container py-5">
+        <h1>Все посты пользователя
+          {{ author.get_full_name }}
+        </h1>
+        <h3>Всего постов:
+          {{ number }}
+        </h3>
+        <article>
+          {% for post in page_obj %}
+            <h3>
+              <article>
+                <ul>
+                  <li>
+                    Автор:
+                    {{ post.author.get_full_name }}
+                  </li>
+                  <li>
+                    Дата публикации:
+                    {{ post.pub_date|date:"d E Y" }}
+                  </li>
+                </ul>
+              </h3>
+              <p>{{ post.text|linebreaksbr }}</p>
+              <a href="{% url 'posts:post_detail' post.id %}">подробная информация
+              </a><br>
+              <a href="<!-- -->">все записи группы</a>
+              <hr>
+              {% if not forloop.last %}
+                <hr>
+              {% endif %}
+            {% endfor %}
+            {% include 'posts/includes/paginator.html' %}
+            <hr>
+          </div>
+        </main>
+        <footer class="border-top text-center py-3"></footer>
+        {% include 'includes/footer.html' %}
+      </body>
+    </html>
+  </body>
+</html>

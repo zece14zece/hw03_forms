@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import include, path
 from posts import views
-from django.conf import settings
 
 posts_patterns = ([
     path('', views.index, name="index"),

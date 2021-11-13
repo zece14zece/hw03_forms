@@ -1,28 +1,21 @@
-<!DOCTYPE html>
-<html lang="ru"> 
-  <head> 
-    <title>
-    {{ post|truncatechars:30 }}
-    </title>
-  </head>
-  <body>       
-    <header>
-    {% include 'includes/header.html' %}
-    </header>
-    <main>
+{% extends 'base.html' %}
+ {% block title %}{{ title }}{% endblock %}
+    {% block content %}
+     <main>
       <div class="row">
         <aside class="col-12 col-md-3">
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
               Дата публикации: {{ post.pub_date|date:"d E Y" }} 
             </li>
-            <!-- если у поста есть группа -->   
+            {% if post.group %}   
               <li class="list-group-item">
-                Группа: <!-- Название группы -->
-                <a href="<!-- -->">
+                Группа: {{ post.group.title }}
+                <a href="{% url 'posts:group_posts' post.group.slug %}">
                   все записи группы
                 </a>
               </li>
+            {% endif %}
               <li class="list-group-item">
                 Автор: {{ post.author.get_full_name }}
               </li>
@@ -30,20 +23,23 @@
               Всего постов автора:  <span >{{ post.author.posts.count }}</span>
             </li>
             <li class="list-group-item">
-              <a href="{% url 'posts:profile' post.author.username %}">
+              <a href="{% url 'posts:profile' post.author %}">
                 все посты пользователя
               </a>
             </li>
+            {% if request.user == post.author %}
+            <li class="list-group-item">              
+                <a href="{% url 'posts:post_edit' post.id %}">редактировать пост</a>                
+            </li> 
+            {% endif %}        
           </ul>
         </aside>
         <article class="col-12 col-md-9">
           <p>
-            {{ post.text|linebreaksbr }}
+           {{ post.text }}
           </p>
-        </article>
+        </article>        
       </div> 
     </main>
-    <footer class="border-top text-center py-3"></footer>
-        {% include 'includes/footer.html' %}  
-  </body>
-</html> 
+    {% endblock %}
+    

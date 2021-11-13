@@ -1,55 +1,35 @@
-<!DOCTYPE html>
-<html lang="ru">
-  <head>
-    {% include 'includes/header.html' %}
-    <title>Профайл пользователя
-      {{ author.get_full_name }}</title>
-  </head>
-  <body>
-    <header>
-      <nav class="navbar navbar-light" style="background-color: lightskyblue">
-        <div class="container"></div>
-      </nav>
-    </header>
+{% extends 'base.html' %}
+ {% block title %}{{ title }}{% endblock %}
+    {% block content %}
     <main>
-      <div class="container py-5">
-        <h1>Все посты пользователя
-          {{ author.get_full_name }}
-        </h1>
-        <h3>Всего постов:
-          {{ number }}
-        </h3>
+      <div class="container py-5">        
+        <h1>Все посты пользователя {{ author.get_full_name }}</h1>
+        <h3>Всего постов: {{ author.posts.count }} </h3>   
         <article>
-          {% for post in page_obj %}
-            <h3>
-              <article>
-                <ul>
-                  <li>
-                    Автор:
-                    {{ post.author.get_full_name }}
-                  </li>
-                  <li>
-                    Дата публикации:
-                    {{ post.pub_date|date:"d E Y" }}
-                  </li>
-                </ul>
-              </h3>
-              <p>{{ post.text|linebreaksbr }}</p>
-              <a href="{% url 'posts:post_detail' post.id %}">подробная информация
-              </a><br>
-              <a href="<!-- -->">все записи группы</a>
-              <hr>
-              {% if not forloop.last %}
-                <hr>
+        {% for post in page_obj.object_list %}
+          <ul>
+            <li>
+              Автор: {{ author.get_full_name }}
+              <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>
+            </li>
+            <li>
+              Дата публикации: {{ post.pub_date|date:"d E Y" }} 
+            </li>
+            </ul>
+            <p>
+              {{post.text}}
+            </p>
+            <a href="{% url 'posts:post_detail' post.id %}">Подробная информация </a>
+            {% if post.group %}    
+               <a href="{% url 'posts:group_posts' post.group.slug %}">Все записи группы {{ post.group }}</a>
               {% endif %}
-            {% endfor %}
-            {% include 'posts/includes/paginator.html' %}
-            <hr>
-          </div>
-        </main>
-        <footer class="border-top text-center py-3"></footer>
-        {% include 'includes/footer.html' %}
-      </body>
-    </html>
-  </body>
-</html>
+            {% if not forloop.last %}                     
+             <hr>
+            {% endif %}                        
+          {% endfor %}          
+        </article>          
+        <hr>
+          {% include 'posts/includes/paginator.html' %} 
+      </div>
+     </main>
+     {% endblock %} 

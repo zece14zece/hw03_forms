@@ -9,7 +9,6 @@ from .models import Group, Post, User
 from django.conf import settings
 
 
-
 def index(request):
     post_list = Post.objects.all()
     paginator = Paginator(post_list, settings.PAGE_COUNT)

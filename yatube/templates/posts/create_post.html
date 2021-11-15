@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Новый пост
+{% block title %}{{title}}
 {% endblock %}
 {% block content %}
   <body>
@@ -16,7 +16,7 @@
                 {% endif %}
               </div>
               <div class="card-body">
-                <form method="post" action="{% if is_edit %}{% url 'posts:post_is_edit' post_id %}{% else %} {% url 'posts:post_create' %}{% endif %}">
+                <form method="post" action="{% if is_edit %}{% url 'posts:post_edit' post_id %}{% else %} {% url 'posts:post_create' %}{% endif %}">
                   {% load user_filters %}
                   {% csrf_token %}
                   {% for field in form %}

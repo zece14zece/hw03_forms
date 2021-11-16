@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}{{title}}
+{% block title %}
+  {% if is_edit %}
+    <title>'Редактирование поста'</title>
+  {% else %}
+    <title>'Создание поста'</title>
+  {% endif %}
 {% endblock %}
 {% block content %}
   <body>
@@ -18,6 +23,20 @@
               <div class="card-body">
                 <form method="post" action="{% if is_edit %}{% url 'posts:post_edit' post_id %}{% else %} {% url 'posts:post_create' %}{% endif %}">
                   {% load user_filters %}
+                  {% if form.errors %}
+                    {% for field in form %}
+                      {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                          {{ error|escape }}
+                        </div>
+                      {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                      <div class="alert alert-danger">
+                        {{ error|escape }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
                   {% csrf_token %}
                   {% for field in form %}
                     <div class="form-group row my-3 p-3">
